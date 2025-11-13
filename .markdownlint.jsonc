@@ -1,0 +1,36 @@
+{
+  // Strict enforcement following GFM/CommonMark methodology
+  "default": true,
+
+  // Semantic line breaks: 80-100 chars (git-diff optimized)
+  "MD013": {
+    "line_length": 100,
+    "heading_line_length": 80,
+    "code_blocks": false,
+    "tables": false
+  },
+
+  // Strict blank line enforcement
+  "MD022": true,  // Headings surrounded by blank lines
+  "MD031": true,  // Fenced code blocks surrounded by blank lines
+  "MD032": true,  // Lists surrounded by blank lines
+
+  // Code blocks must have language ID
+  "MD040": true,
+
+  // Allow necessary HTML for UX features + generic type brackets in code examples
+  "MD033": {
+    "allowed_elements": ["details", "summary", "kbd", "br", "T", "Product"]
+  },
+
+  // First line should be heading (structural consistency)
+  "MD041": true,
+
+  // Duplicate headings OK if in different sections
+  "MD024": {
+    "siblings_only": true
+  },
+
+  // No emphasis as heading
+  "MD036": true
+}

@@ -7,12 +7,12 @@
 
 ## Glossary
 
-| Term | Definition |
-|------|------------|
-| **O-Interface** | Technology-independent interface (no framework dependencies) |
-| **ISP** | Interface Segregation Principle - avoid forcing clients to depend on unused methods |
-| **Value Object** | Domain-specific type (e.g., `ProductCode`) instead of primitive (e.g., `string`) |
-| **Thread-Safe** | Safe for concurrent access by multiple threads without external synchronization |
+| Term             | Definition                                                                          |
+|------------------|-------------------------------------------------------------------------------------|
+| **O-Interface**  | Technology-independent interface (no framework dependencies)                        |
+| **ISP**          | Interface Segregation Principle - avoid forcing clients to depend on unused methods |
+| **Value Object** | Domain-specific type (e.g., `ProductCode`) instead of primitive (e.g., `string`)    |
+| **Thread-Safe**  | Safe for concurrent access by multiple threads without external synchronization     |
 
 ---
 
@@ -37,19 +37,19 @@ public interface ISearchProduct
 
 Review based on the [interface-quality-checklist.md](interface-quality-checklist.md) (11 questions).
 
-| # | Question | Score | Evidence |
-|---|----------|-------|----------|
-| 1 | Clear method names? | 2 | `Find`, `Search`, `All` are understandable. |
-| 2 | Appropriate parameter types? | 1 | `string text` is vague; should be a typed `SearchCriteria`. |
-| 3 | Appropriate return types? | 1 | `IList<Product>` exposes mutability → risk of shared-state modification. |
-| 4 | Interface cohesive (single responsibility)? | 2 | All methods relate to product lookup. |
-| 5 | Exceptions documented? | 0 | No documentation: does `Find` throw if not found? Timeouts? IO errors? |
-| 6 | Null-safety contracts clear? | 1 | `Product?` used, but no documented rules when null is returned. |
-| 7 | Error handling strategy clear? | 0 | No explanation of failure modes (network, DB errors, invalid input). |
-| 8 | Mutability / side effects safe? | 0 | `IList<Product>` allows external mutation of internal state. |
-| 9 | Extensibility / version tolerance? | 1 | Free-text search not future-proof; no criteria object. |
-| 10 | Type safety? | 1 | No value object for product code or search criteria. |
-| 11 | Thread-safety expectations documented? | 0 | Not mentioned at all. |
+| #  | Question                                    | Score | Evidence                                                                 |
+|----|---------------------------------------------|-------|--------------------------------------------------------------------------|
+| 1  | Clear method names?                         | 2     | `Find`, `Search`, `All` are understandable.                              |
+| 2  | Appropriate parameter types?                | 1     | `string text` is vague; should be a typed `SearchCriteria`.              |
+| 3  | Appropriate return types?                   | 1     | `IList<Product>` exposes mutability → risk of shared-state modification. |
+| 4  | Interface cohesive (single responsibility)? | 2     | All methods relate to product lookup.                                    |
+| 5  | Exceptions documented?                      | 0     | No documentation: does `Find` throw if not found? Timeouts? IO errors?   |
+| 6  | Null-safety contracts clear?                | 1     | `Product?` used, but no documented rules when null is returned.          |
+| 7  | Error handling strategy clear?              | 0     | No explanation of failure modes (network, DB errors, invalid input).     |
+| 8  | Mutability / side effects safe?             | 0     | `IList<Product>` allows external mutation of internal state.             |
+| 9  | Extensibility / version tolerance?          | 1     | Free-text search not future-proof; no criteria object.                   |
+| 10 | Type safety?                                | 1     | No value object for product code or search criteria.                     |
+| 11 | Thread-safety expectations documented?      | 0     | Not mentioned at all.                                                    |
 
 ---
 
@@ -64,9 +64,11 @@ Review based on the [interface-quality-checklist.md](interface-quality-checklist
 ## 4. Strengths
 
 ### Simple and cohesive
+
 All three methods focus on product search/lookup, making the interface easy to understand.
 
 ### Intuitive names
+
 `Find`, `Search`, and `All` communicate intent reasonably well.
 
 ---
@@ -76,23 +78,27 @@ All three methods focus on product search/lookup, making the interface easy to u
 ### 5.1 Missing error and null semantics
 
 `Product? Find(string code)` returns a nullable product, but:
+
 - Is `null` used when a product is not found?
 - Or does the method throw in that case?
 - Are there special cases (e.g., invalid code format)?
 - No documentation for exceptions (e.g., `ArgumentNullException`, infrastructure errors).
 
-**Impact:** Callers must guess how to handle failures. Different implementations might behave differently, leading to subtle bugs.
+**Impact:** Callers must guess how to handle failures.
+Different implementations might behave differently, leading to subtle bugs.
 
 ### 5.2 Wrong collection type (IList<Product>)
 
 `IList<Product> All()` exposes a mutable list to callers.
 
 Callers can:
+
 - `list.Clear()`
 - `list.Add(...)`
 - `list.RemoveAt(...)`
 
 **Impact:**
+
 - If an implementation returns its internal list, callers can accidentally corrupt internal state.
 - Even if a copy is returned, the method signature suggests mutability and encourages misuse.
 
@@ -102,7 +108,8 @@ Callers can:
 
 Product codes usually follow a specific format and are a distinct domain concept.
 
-**Impact:** Typos, copy-paste errors, or mixing up different string-based identifiers are only detected at runtime.
+**Impact:** Typos, copy-paste errors,
+or mixing up different string-based identifiers are only detected at runtime.
 
 ### 5.4 No documentation for thread-safety
 
@@ -183,6 +190,7 @@ Product? Find(ProductCode code);
 ## 7. Final Assessment
 
 The reviewed ISearchProduct interface is small and cohesive, but:
+
 - Lacks clear contracts for null and error handling,
 - Exposes mutable collections,
 - And does not leverage type-safe domain value objects.
@@ -196,5 +204,6 @@ With the recommended changes, the interface could reach a "Good" (≥ 70/100) qu
 ## See Also
 
 - [interface-quality-checklist.md](interface-quality-checklist.md) - The 11-question evaluation methodology
-- [../01-isearchproduct-specification/isearchproduct-interface.md](../01-isearchproduct-specification/isearchproduct-interface.md) - High-quality interface example for comparison
+- [High-quality interface example](../01-isearchproduct-specification/isearchproduct-interface.md)
+  for comparison
 - [exercise-slide-145.pdf](exercise-slide-145.pdf) - Exercise slide 145 (interface quality review)

@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="Architectural_Quality_V701 (2).pdf" />
+        <None Remove="Architectural_Quality_V701 (2).pdf"/>
     </ItemGroup>
 
 </Project>

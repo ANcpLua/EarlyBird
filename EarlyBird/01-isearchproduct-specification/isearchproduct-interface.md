@@ -7,20 +7,23 @@
 
 ## Glossary
 
-| Term | Definition |
-|------|------------|
-| **O-Interface** | Technology-independent interface specification (no database, no framework dependencies) |
-| **Thread-Safe** | Safe for concurrent access by multiple threads without external synchronization |
-| **Null-Safe** | Methods never return null; empty collections used instead |
-| **IReadOnlyCollection** | Immutable collection interface that prevents callers from modifying contents |
+| Term                    | Definition                                                                              |
+|-------------------------|-----------------------------------------------------------------------------------------|
+| **O-Interface**         | Technology-independent interface specification (no database, no framework dependencies) |
+| **Thread-Safe**         | Safe for concurrent access by multiple threads without external synchronization         |
+| **Null-Safe**           | Methods never return null; empty collections used instead                               |
+| **IReadOnlyCollection** | Immutable collection interface that prevents callers from modifying contents            |
 
 ---
 
 ## 1. Interface Definition
 
-The `ISearchProduct` interface provides product search and retrieval capabilities for the EarlyBird breakfast delivery system. It abstracts product catalog operations from implementation details.
+The `ISearchProduct` interface provides product search and retrieval capabilities
+for the EarlyBird breakfast delivery system.
+It abstracts product catalog operations from implementation details.
 
-ISearchProduct is offered by the EarlyBird ProductManager component and forms part of its public programming interface.
+ISearchProduct is offered by the EarlyBird ProductManager component
+and forms part of its public programming interface.
 
 ```csharp
 namespace EarlyBird.Application.Interfaces;
@@ -118,6 +121,7 @@ Console.WriteLine($"{product.Name}: €{product.PricePerUnit}");
 ```
 
 **Expected behavior:**
+
 - Returns the product if it exists
 - Throws `ProductNotFoundException` if the code doesn't exist
 - Throws `ArgumentException` if code is null or empty
@@ -140,6 +144,7 @@ foreach (var product in products)
 ```
 
 **Expected behavior:**
+
 - Returns products that have ALL specified characteristics (AND logic)
 - Returns empty collection if no products match (never null)
 - Empty criteria set returns all products
@@ -152,6 +157,7 @@ Console.WriteLine($"Total products: {allProducts.Count}");
 ```
 
 **Expected behavior:**
+
 - Returns all products in the catalog
 - Returns empty collection if catalog is empty (never null)
 
@@ -162,6 +168,7 @@ Console.WriteLine($"Total products: {allProducts.Count}");
 ### Null Safety
 
 **Decision:** Methods never return null.
+
 - Search methods return empty collections instead of null
 - Eliminates need for null checks in calling code
 - Clearer contract: "you always get a collection"
@@ -169,12 +176,14 @@ Console.WriteLine($"Total products: {allProducts.Count}");
 ### Error Handling
 
 **FindByCode vs SearchByCharacteristics:**
+
 - `FindByCode()` throws exception if not found → use when product MUST exist
 - `SearchByCharacteristics()` returns empty collection → use for optional results
 
 ### Immutability
 
 **Decision:** Return `IReadOnlyCollection<Product>`.
+
 - Prevents callers from modifying the returned collection
 - Clear contract: this is query data, not mutable state
 - Implementation can safely cache results
@@ -182,6 +191,7 @@ Console.WriteLine($"Total products: {allProducts.Count}");
 ### Thread Safety
 
 **Requirement:** Implementations must be thread-safe.
+
 - Multiple threads can call methods concurrently
 - No external synchronization needed by callers
 
@@ -189,14 +199,14 @@ Console.WriteLine($"Total products: {allProducts.Count}");
 
 ## 5. What a Programmer Can Expect
 
-| Aspect | Guarantee |
-|--------|-----------|
-| **Null returns** | Never. Collections are empty if no results. |
-| **Collection modification** | Not possible. Returns `IReadOnlyCollection`. |
-| **Thread safety** | Safe for concurrent calls. |
-| **Performance** | `FindByCode` should be fast (O(1) or O(log n)). Search methods may be slower (O(n)). |
-| **Errors** | Invalid input → exception with clear message. Missing product → `ProductNotFoundException`. |
-| **Empty criteria** | `SearchByCharacteristics({})` returns all products. |
+| Aspect                      | Guarantee                                                                                   |
+|-----------------------------|---------------------------------------------------------------------------------------------|
+| **Null returns**            | Never. Collections are empty if no results.                                                 |
+| **Collection modification** | Not possible. Returns `IReadOnlyCollection`.                                                |
+| **Thread safety**           | Safe for concurrent calls.                                                                  |
+| **Performance**             | `FindByCode` should be fast (O(1) or O(log n)). Search methods may be slower (O(n)).        |
+| **Errors**                  | Invalid input → exception with clear message. Missing product → `ProductNotFoundException`. |
+| **Empty criteria**          | `SearchByCharacteristics({})` returns all products.                                         |
 
 ---
 
@@ -205,15 +215,18 @@ Console.WriteLine($"Total products: {allProducts.Count}");
 ### Strengths
 
 **Type safety:**
+
 - Enum for characteristics prevents typos ("vegetarion" won't compile)
 - Clear method signatures reduce errors
 
 **Clear contracts:**
+
 - Never returns null → no defensive null checks needed
 - IReadOnlyCollection → caller can't accidentally modify results
 - Specific exceptions → caller knows exactly what went wrong
 
 **Simplicity:**
+
 - Three focused methods, each with single purpose
 - Easy to understand, hard to misuse
 
@@ -221,6 +234,8 @@ Console.WriteLine($"Total products: {allProducts.Count}");
 
 ## See Also
 
-- [../02-interface-quality-review/interface-quality-checklist.md](../02-interface-quality-review/interface-quality-checklist.md) - Use this checklist to evaluate interface quality
-- [../02-interface-quality-review/peer-review-isearchproduct.md](../02-interface-quality-review/peer-review-isearchproduct.md) - Example peer review (scored 41/100)
+- [Interface quality checklist](../02-interface-quality-review/interface-quality-checklist.md)
+  – Use this checklist to evaluate interface quality
+- [Example peer review](../02-interface-quality-review/peer-review-isearchproduct.md)
+  – Sample ISearchProduct review (scored 41/100)
 - [exercise-slide-140.pdf](exercise-slide-140.pdf) - Exercise slide 140 (ISearchProduct specification)
