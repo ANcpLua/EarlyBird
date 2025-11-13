@@ -96,20 +96,25 @@ public interface IReadOnlyList<out T>
 {
     int Count { get; }
     T this[int index] { get; }
-    bool Contains(T item);
-    int IndexOf(T item);
     T[] ToArray();
 }
 
 public interface IList<T> : IReadOnlyList<T>
 {
     new T this[int index] { get; set; }
+    bool Contains(T item);
+    int IndexOf(T item);
     void Add(T item);
-    bool Remove(T item);      // Return success
-    T RemoveAt(int index);    // Return removed element
+    bool Remove(T item);
+    T RemoveAt(int index);
     void Clear();
 }
 ```
+
+**Note:** `Contains` and `IndexOf` are moved to `IList<T>` (not `IReadOnlyList<out T>`)
+because they take `T` as input parameter, which violates covariance rules.
+This matches the .NET BCL design where `IReadOnlyList<out T>` remains minimal to
+support safe covariance.
 
 ### 3.3 Remove does not indicate success
 
@@ -154,11 +159,11 @@ T this[int index] { get; set; }
 
 - To remove by index: `var item = Get(i); Remove(item);`
 
-**Suggestion:** Add typical list helpers:
+**Suggestion:** Add typical list helpers (included in recommended interface above):
 
 ```csharp
 bool Contains(T item);
-int IndexOf(T item); // -1 if not found
+int IndexOf(T item);
 T RemoveAt(int index);
 ```
 
