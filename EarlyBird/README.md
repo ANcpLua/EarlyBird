@@ -65,5 +65,5 @@ Application core design separating stable business logic from volatile technolog
 
 ## Course Information
 
-**Course:** Software Engineering & Software Architecture
-**Instructor:** Martin Hasitschka
+**Course:** Software Architecture
+**Instructor:** Dr. Martin Hasitschka
