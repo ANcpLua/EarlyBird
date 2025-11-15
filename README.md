@@ -1,5 +1,14 @@
 # EarlyBird - Software Architecture Exercises
 
+> [!IMPORTANT]
+> **This repository has been archived.** All exercises are now consolidated in the [Software-Architecture](https://github.com/ANcpLua/Software-Architecture) repository for easier navigation.
+>
+> **Find EarlyBird exercises at:**
+> - Evening 2: [ISearchProduct Interface](https://github.com/ANcpLua/Software-Architecture/tree/main/evening-2/01-isearchproduct-specification)
+> - Evening 2: [Interface Quality Review](https://github.com/ANcpLua/Software-Architecture/tree/main/evening-2/02-interface-quality-review)
+> - Evening 2: [IList Interface Design](https://github.com/ANcpLua/Software-Architecture/tree/main/evening-2/03-ilist-interface-design)
+> - Evening 3: [Application Core Architecture](https://github.com/ANcpLua/Software-Architecture/tree/main/evening-3/04-application-core-architecture)
+
 Software architecture exercises for a breakfast delivery system, demonstrating O-Interface design, quality assurance, and application core architecture principles.
 
 Part of the Software Architecture course exercise collection.
